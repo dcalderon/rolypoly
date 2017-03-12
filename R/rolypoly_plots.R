@@ -26,7 +26,7 @@ plot_rolypoly_annotation_estimates <- function(rolypoly) {
                         y = effect, ymin = CI_lo, ymax = CI_hi)) +
     geom_pointrange(color = 'darkgray', fill = 'black', shape = 21) +
     theme_bw() + xlab('') + ylab('-log10(p value)') +
-    theme(text = element_text(size = 14, family = 'GaramondNo8'),
+    theme(text = element_text(size = 14), #, family = 'GaramondNo8'),
           axis.text.x = element_text(angle = 55, hjust = 1, size = 14)) +
     geom_hline(yintercept = 0, linetype = 3)
   return(p)
@@ -50,7 +50,7 @@ plot_rolypoly_annotation_ranking <- function(rolypoly) {
   p <- df %>% dplyr::filter(annotation %in% gene_annotations) %>% dplyr::arrange(-bt_value) %>%
     ggplot(aes(x = factor(annotation, levels = annotation), y = -log10(bp_value))) +
     geom_point() + theme_bw() + xlab('') + ylab('-log10(p value)') +
-    theme(text = element_text(size = 14, family = 'GaramondNo8'),
+    theme(text = element_text(size = 14), #, family = 'GaramondNo8'),
                        axis.text.x = element_text(angle = 55, hjust = 1, size = 14)) +
     geom_hline(yintercept = -log10(0.05), linetype = 2)
   return(p)
