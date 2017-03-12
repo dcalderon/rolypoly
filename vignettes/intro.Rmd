@@ -1,0 +1,120 @@
+---
+title: "Introduction to rolypoly"
+author: "Diego Calderon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Our package, rolypoly, is an implementation of the RolyPoly model for identifying trait-associated functional annotations. Specifically, we use rolypoly to find enrichment of signal from association summary statistics of SNPs releaed by genome-wide association studies (GWAS) in cellular function annotations collected from RNA-seq (many times single-cell based cell types). In this vignette I will walk the reader through a typical run of the rolypoly pipeline to identify tissues relevant for determining an individuals total cholesterol level.
+
+```{r, message = FALSE, results='hide', warning=FALSE}
+# load up libraries for vignette
+require(rolypoly); require(dplyr); require(ggplot2)
+```
+
+# Requisite data
+
+To run rolypoly we need GWAS summary statistics, expression data, an expression data annotation file, and LD information. We have included a simulated version of each of these (included with rolypoly installation) so one could follow along.
+
+## GWAS
+
+For this vignette we will use previously simulated GWAS summary statistics. Each column is required and should be self-explanatory. We only use autosomes, pos refers to the base pair position of the SNP whose rsid is included. The beta column is the univarite standardized regression coefficient and is a standard summary statistic released by GWAS. In cases where the GWAS is a case-control trait this column can be occupied with the log of the odds ratio. Usually a standard error term is released by a GWAS (se). Lastly, we require a column for minor allele frequency (maf) to filter out rare variants. This columns can also be used to model the effect of allele frequency on effect size but that's out of the scope of this vignette.
+
+```{r}
+sim_gwas_data %>% head
+```
+
+## Expression data
+
+Gene expression data should be a data frame with rownames labeled by the gene (usually we use ENSG gene ids) and column names corresponding to annotations we want to test for associations with the GWAS trait. Our simulated expression data set has 5 tissues and 1000 genes.
+
+```{r}
+sim_expression_data_normalized %>% head
+```
+
+Of note, we require that genes are comparable across rows. So, if you take a raw expression matrix we suggest first performing quantile normalization to insure the columns have the same distribution, and then using a function like `scale` to normalize the rows. Furthermore, rolypoly does not do well with negative expression values, thus, use `abs` or square the expression numbers. Such a procedure is consistant with the hypothesis that deviations from mean gene expression lead to GWAS effects with larger variance.
+
+## Gene annotation
+
+To link gene expression with the location of GWAS variants we require a block annotation data frame. It consists of the chromosome, start and end of the block and a block label that should correspond with the gene expression rowname in the expression data set. For our work, we defined a block as a 10kb window centered around each gene's TSS. Feel free to change block annotation start and end points to increase or decrease this window size.
+
+```{r}
+sim_block_annotation %>% head
+```
+
+
+## Linkage disequilibrium (LD)
+
+Our model accounts for the effects of LD by using Pearson's r correlation values pairwise between SNPs. If these data are not available for the actual GWAS population, you may substitute LD information from a similar reference population. For many studies, we found that calculating these values from 1000g phase 3 european populations works well.
+
+We have included a simulated LD dataset to explore the format we require, which was constructed from a sample of LD data from chromosome one. The main rolypoly function call takes a path to a folder with files with LD data, one for each chromosome (labeled 1-22), and the .Rds suffix. Each of these Rds objects contains columns corresponding to the chromosome, base pair, minor allele frequency (optional), for each SNP. In addition there is the column labeled R which contains the Pearson's r correlation between two variants. This was all based on the output from PLINK.
+
+```{r}
+ld_path <- system.file("extdata", "example_ld", package = "rolypoly")
+ld_data <- readRDS(paste(ld_path, '/1.Rds', sep = ''))
+ld_data %>% head
+```
+
+Rather than calculate your own LD statistics we have provided previously formatted LD data at the following url:
+https://drive.google.com/file/d/0B_X6s0BThq9ZXzNNbjk3V2hNdlk/view?usp=sharing
+
+In these files we include LD calculated using PLINK for 1000g phase 3 genomes filtered for values of $R^2 > 0.2$.
+
+# Rolling rolypoly
+
+We include all the previously described data into the main rolypoly function call. This function has many parameters to tinker with, however, should run fine with the defaults. Most importantly consider the number of bootstrap iterations to get accurate standard errors. We usually use at least 200.
+
+```{r, results='hide', message = FALSE}
+rp <- rolypoly_roll(
+  gwas_data = sim_gwas_data,
+  block_annotation = sim_block_annotation,
+  block_data = sim_expression_data_normalized,
+  ld_folder = ld_path
+)
+```
+
+## results
+
+Once rolypoly is finished we can access all the results within the returned rolypoly object. We generated the GWAS under the model with effects of 0.02 and 0.01 for the Liver and Blood tissues. To take a look at the inferred parameters use:
+
+```{r}
+rp$full_results$parameters %>% sort
+```
+
+Better yet, there's a data frame with results from the bootstrap runs that calculates standard errors for these paramter estimates, p-values, and 95\% confidence intervals.
+
+```{r}
+rp$bootstrap_results %>% arrange(-bt_value) %>% head
+```
+
+For visualization, one can use the following function which plots the estimate with 95\% confidence intervals,
+
+```{r, fig.show='asis', fig.width=6, fig.height=3.5}
+plot_rolypoly_annotation_estimates(rp)
+```
+
+Additionally, we plot the $-log10(p)$ to rank tissues by the strength of their association
+
+```{r, fig.show='asis', fig.width=6, fig.height=3.5}
+plot_rolypoly_annotation_ranking(rp)
+```
+
+These functions return ggplot2 objects so free to manipulate them as such.
+
+
+# Inference on other expression data set
+
+Without any parallelization rolypoly could take a couple hours to run. Much of the computation is spent linking SNPs to genes and reading in LD information. If one provides the a rolypoly object to the rolypoly parameter of the `rolypoly_roll` function call and a new object of block data, then only inference is performed. For example with the previous rolypoly object we would run inference on a new expression data set with the following call (assuming that the gene labels did not change between datasets).
+
+```{r, eval = FALSE}
+rp <- rolypoly_roll(
+  # some new set of expression data
+  block_data = new_sim_expression_data_normalized,
+)
+```
+
+Thus, one can run precomputation (slow) once and then rerun inference (faster) on various expression matrices more quickly.

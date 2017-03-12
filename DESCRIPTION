@@ -1,0 +1,23 @@
+Package: rolypoly
+Type: Package
+Title: Identifying Trait-Relevant Functional Annotations
+Version: 0.0.1.9000
+Date: 2017-1-26
+Author: Diego Calderon
+Maintainer: Diego Calderon <dcal@stanford.edu>
+Description: Using GWAS summary statistic enrichment to identify trait-relevant
+  functional annotations.
+Depends: R (>= 3.1.3),
+Imports: data.table (>= 1.9.6), dplyr (>= 0.4.3), foreach (>= 1.4.3),
+        ggplot2 (>= 1.0.1), glmnet (>= 2.0-5), MASS (>= 7.3-45), Matrix
+        (>= 1.2-6), matrixcalc (>= 1.0-3),
+LinkingTo:
+Suggests: CompQuadForm (>= 1.4.1), knitr, testthat, rmarkdown
+License: GPL-3
+VignetteBuilder: knitr
+LazyData: TRUE
+URL: https://github.com/dcalderon/rolypoly
+BugReports: https://github.com/dcalderon/rolypoly/issues
+RoxygenNote: 6.0.1
+NeedsCompilation: no
+Packaged: 2017-03-12 07:38:09 UTC; dcal

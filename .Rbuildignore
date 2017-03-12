@@ -1,0 +1,11 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^rolypoly_scripts/*
+^README\.Rmd$
+^cran-comments\.md$
+^NEWS\.md$
+^\.travis\.yml$
+^logo/*
+^rolypoly_0.0.0.9000.tar.gz$
+^.*.tar.gz$
+^revdep

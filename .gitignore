@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+.DS_Store
+*.log
+inst/doc
+*.html
+*.pdf
+rolypoly_scripts/example_data
+rolypoly_scripts/example_data/*
+rolypoly.Rproj
+rolypoly_scripts/*.png
+rolypoly_scripts/*.pdf
+rolypoly_scripts/*.txt
+rolypoly_scripts/interesting_plots
+rolypoly_scripts/gtex_results
+revdep
