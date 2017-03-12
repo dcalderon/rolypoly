@@ -1,7 +1,7 @@
 rolypoly
 ====================================
 
-[![Travis-CI Build Status](https://travis-ci.org/dcalderon/rp.svg?branch=master)](https://travis-ci.org/dcalderon/rolypoly)
+[![Travis-CI Build Status](https://travis-ci.org/dcalderon/rolypoly.svg?branch=master)](https://travis-ci.org/dcalderon/rolypoly)
 
 This package is meant to identify enrichment of SNP-trait association signal in functional annotations.
 
