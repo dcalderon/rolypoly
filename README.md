@@ -7,16 +7,16 @@ This package is meant to identify enrichment of SNP-trait association signal in 
 
 Install
 -------
-At the moment, installation is easiest using the devtools package. The function `devtools::install_github("dcalderon/rolypoly", build_vignettes = TRUE)` will install the package and build vignettes.
+`install.packages("rolypoly")`
 
 Usage
 -----
-I am in the process of writing tutorials for basic rolypoly functionality. For now see the introductory vignette by running `vignette('intro', package = 'rolypoly')`.
+For usage information see the [introductory vignette](https://cran.r-project.org/web/packages/rolypoly/vignettes/intro.html). Additionally, refer to the [manual](https://cran.r-project.org/web/packages/rolypoly/rolypoly.pdf) for documentation of rolypoly functions.
 
 Notes
 -----
 + Still in early alpha phase.
 
-To Do
------
-+ Polish the vignettes.
+Citation
+--------
+The underlying model is described in: Calderon D (2017). [Inferring Relevant Cell Types For Complex Traits Using Single-Cell Gene Expression](http://www.biorxiv.org/content/early/2017/05/10/136283). bioRxiv 10.1101/136283
