@@ -19,4 +19,4 @@ Notes
 
 Citation
 --------
-The underlying model is described in: Calderon D (2017). [Inferring Relevant Cell Types For Complex Traits Using Single-Cell Gene Expression](http://www.biorxiv.org/content/early/2017/05/10/136283). bioRxiv 10.1101/136283
+The underlying model is described in: Calderon D (2017). [Inferring Relevant Cell Types for Complex Traits by Using Single-Cell Gene Expression](https://authors.elsevier.com/a/1V~lWgeWmbdg). AJHG 10.1016/j.ajhg.2017.09.009
