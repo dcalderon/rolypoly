@@ -243,9 +243,11 @@ rolypoly_load_block_data <- function(rolypoly, block_data) {
       block$x <- NULL # to make sure we totally replace previous stuffs
       return(block)
     }
-    x <- block_data[block$block_info$label,]
-    if (nrow(x) != 1) { stop('remove duplicates from block data') }
-    x <- as.matrix(x[rep(1,block$n_snps),])
+    x <- block_data[block$block_info$label, , drop=FALSE] # drop=FALSE is needed to avoid returning a numeric instead of a data.frame when block_data only contains a single column.
+    # ^ explanation: if a numeric is returned, the remaining code will fail.
+    # ^ explanation: If drop=TRUE the result is coerced to the lowest possible dimension. REF: https://stackoverflow.com/a/21025639/6639640
+    if (nrow(x) != 1) {stop("remove duplicates from block data")}
+    x <- as.matrix(x[rep(1, block$n_snps), ], drop=FALSE) # drop=FALSE is needed in case of block_data is a 1 column data frame. See above
     if (!is.null(rolypoly$snp_annotations)) {
       # snp information data table
       x <- cbind(as.matrix(block$snps[,rolypoly$snp_annotations, with = F]), x)
