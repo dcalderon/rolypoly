@@ -25,7 +25,7 @@ plot_rolypoly_annotation_estimates <- function(rolypoly) {
     ggplot(aes(x = factor(annotation, levels = annotation),
                         y = effect, ymin = CI_lo, ymax = CI_hi)) +
     geom_pointrange(color = 'darkgray', fill = 'black', shape = 21) +
-    theme_bw() + xlab('') + ylab('-log10(p value)') +
+    theme_bw() + xlab('') + ylab('RolyPoly estimated effect') +
     theme(text = element_text(size = 14), #, family = 'GaramondNo8'),
           axis.text.x = element_text(angle = 55, hjust = 1, size = 14)) +
     geom_hline(yintercept = 0, linetype = 3)
