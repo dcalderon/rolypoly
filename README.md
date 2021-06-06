@@ -11,7 +11,7 @@ Install
 
 Usage
 -----
-For usage information see the [introductory vignette](https://cran.r-project.org/web/packages/rolypoly/vignettes/intro.html). Additionally, refer to the [manual](https://cran.r-project.org/web/packages/rolypoly/rolypoly.pdf) for documentation of rolypoly functions.
+For usage information see the [introductory vignette](intro.html). Additionally, refer to the [manual](rolypoly_manual.pdf) for documentation of rolypoly functions.
 
 Notes
 -----
