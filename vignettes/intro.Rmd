@@ -60,7 +60,7 @@ ld_data %>% head
 ```
 
 Rather than calculate your own LD statistics we have provided previously formatted LD data at the following url:
-https://drive.google.com/file/d/0B_X6s0BThq9ZXzNNbjk3V2hNdlk/view?usp=sharing
+https://drive.google.com/file/d/1YR-Pf6XPqFV9K-ukaxxHa7PXfsto1xAq/view?usp=sharing
 
 In these files we include LD calculated using PLINK for 1000g phase 3 genomes filtered for values of $R^2 > 0.2$.
 
